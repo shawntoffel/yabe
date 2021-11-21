@@ -4,6 +4,9 @@ Yet Another Blob Explorer. Browse, upload, and delete Azure Blob Storage blobs.
 
 This project is a Blazor web app using the server hosting model. Authentication is provided by Azure AD.
 
+![Dashboard](docs/screenshots/dashboard.png)
+
+
 ### Azure Blob Storage
 Navigate to your Storage Account in Azure Portal. Under the Access Keys tab find a value labeled "Connection string". Assign this value to `ConnectionStrings:AzureBlobStorage` the `appsettings.json` or by environment variable with prefix `Yabe_`. 
 
