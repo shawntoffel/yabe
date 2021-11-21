@@ -8,7 +8,7 @@ This project is a Blazor web app using the server hosting model. Authentication 
 
 
 ### Azure Blob Storage
-Navigate to your Storage Account in Azure Portal. Under the Access Keys tab find a value labeled "Connection string". Assign this value to `ConnectionStrings:AzureBlobStorage` the `appsettings.json` or by environment variable with prefix `Yabe_`. 
+Navigate to your Storage Account in Azure Portal. Under the Access Keys tab find a value labeled "Connection string". Assign this value to `ConnectionStrings:AzureBlobStorage` via the `appsettings.json` file or by environment variable with prefix `Yabe_`. 
 
 ### Azure AD
 Follow the instructions in [Register an application](https://docs.microsoft.com/en-us/azure/active-directory/develop/quickstart-register-app) with these additions:
@@ -36,7 +36,7 @@ Note the double underscore separator `__` for nested settings.
   "ConnectionStrings": {
       "AzureBlobStorage": "your blob storage connection string"
   },
-  "Yabe": {
+  "Site": {
       "Title": "Yabe",
       "SubTitle": "Yet Another Blob Explorer",
       "EditorRole": "Editor",
