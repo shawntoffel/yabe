@@ -1,0 +1,83 @@
+﻿@inherits LayoutComponentBase
+@inject IBlobManager _blobManager;
+@using Yabe.Application.Authorization
+@using Yabe.Application.Extensions
+@using Yabe.Domain
+@using Yabe.Ui.Managers
+@inject IAuthorizationManager _authorizationManager
+@inject IJSRuntime _jsRuntime
+
+<tr>
+    <td><span class=""><i class="fas fa-check-circle"></i></span></td>
+    <td class="is-hidden-mobile">
+        @if (_copied)
+        {
+            <span class="" ><i alt="hi" class="fas fa-check"></i></span>
+        }
+        else
+        {
+            <a @onclick="@(() => CopyToClipboard(Blob.Url))">
+                <span class=""><i class="far fa-copy"></i></span>
+            </a>
+        }
+    </td>
+    <td>
+        @if (string.IsNullOrEmpty(Blob.Url))
+        {
+            @Blob.BaseName();
+        }
+        else
+        {
+            <a target="_blank" href="@Blob.Url">@(Blob.BaseName())</a>
+        }
+    </td>
+
+    <td class="is-hidden-mobile">@Blob.Size.ToFriendlyBytesString()</td>
+    <td class="is-hidden-mobile">@Blob.LastModified?.ToString("g")</td>
+
+    @if (_authorizationManager.CanEdit())
+    {
+        <td>
+            @if (_isDeleting)
+            {
+                <span class="has-text-info"><i class="fas fa-spinner fa-pulse"></i></span>
+            }
+            else
+            {
+                <a @onclick="Delete">
+                    <span class=""><i class="far fa-trash-alt"></i></span>
+                </a>
+            }
+        </td>
+    }
+</tr>
+
+@code {
+    [Parameter]
+    public Blob Blob { get; set; }
+
+    [Parameter]
+    public Func<Blob, Task> OnDelete { get; set; }
+
+    private bool _isDeleting;
+    private bool _copied;
+
+    private async Task Delete()
+    {
+        _isDeleting = true;
+
+        if (OnDelete != null)
+            await OnDelete(Blob);
+
+        _isDeleting = false;
+    }
+
+    public async Task CopyToClipboard(string content)
+    {
+        _copied = true;
+        await Task.Delay(350);
+
+        await _jsRuntime.InvokeVoidAsync("navigator.clipboard.writeText", content);
+        _copied = false;
+    }
+}

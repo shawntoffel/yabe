@@ -1,0 +1,38 @@
+﻿<nav class="breadcrumb" aria-label="breadcrumbs">
+    <ul>
+        @if (string.IsNullOrEmpty(Directory))
+        {
+            <li></li>
+        }
+        else
+        {
+            @foreach (var dir in Directory.Split('/'))
+            {
+                <li><a @onclick="() => SetDirectory(GenDir(dir))">@dir</a></li>
+            }
+        }
+    </ul>
+</nav>
+
+@code {
+
+    [Parameter]
+    public string Directory { get; set; }
+
+    [Parameter]
+    public Func<string, Task> OnSetDirectory { get; set; }
+
+    public async Task SetDirectory(string dir)
+    {
+        if (OnSetDirectory != null)
+            await OnSetDirectory(dir);
+    }
+
+    protected string GenDir(string part)
+    {
+        if (!part.EndsWith("/"))
+            part += "/";
+
+        return Directory.Split(part).First();
+    }
+}

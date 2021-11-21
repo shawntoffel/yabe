@@ -1,0 +1,93 @@
+@page "/"
+@using FluentValidation
+@using MediatR
+@using Yabe.Domain
+@using Yabe.Ui.Managers
+@using Yabe.Ui.Models
+@inject IJSRuntime _jsRuntime
+@inject IBlobManager _blobManager
+@inject IMediator _mediator
+@inject AuthenticationStateProvider _authenticationStateProvider
+@attribute [Authorize]
+
+<div class="block">
+    <Uploader Directory=@_directory OnUploaderResult="OnUploaderResult"></Uploader>
+</div>
+
+<div class="block">
+    <Breadcrumb Directory=@_directory OnSetDirectory="SetDirectory"></Breadcrumb>
+</div>
+
+<div class="block">
+    <BlobList BlobDirectory="_currentBlobDirectory" OnSetDirectory="SetDirectory" OnDelete="Delete"></BlobList>
+</div>
+
+@code {
+    private string _directory = "";
+
+    private BlobDirectory _currentBlobDirectory = new BlobDirectory();
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadBlobs(_directory);
+    }
+
+    protected async Task LoadBlobs(string path = "")
+    {
+        _currentBlobDirectory = await _blobManager.ListBlobs(path);
+        StateHasChanged();
+    }
+
+    protected async Task SetDirectory(string dir)
+    {
+        _directory = dir;
+
+        await LoadBlobs(dir);
+    }
+
+    private async Task OnUploaderResult(UploadResult result)
+    {
+        if (result.Success)
+            await Toast($"Successfully uploaded {result.Count} file(s).");
+        else
+            await Toast(result.Message, false);
+
+        await LoadBlobs(_directory);
+    }
+
+    private async Task Delete(Blob blob)
+    {
+        await ErrorWrapper(async () =>
+        {
+            await _blobManager.Delete(blob.Name);
+        });
+
+        await LoadBlobs(_directory);
+    }
+
+    public async Task Toast(string message, bool success = true)
+    {
+        var toast = new ToastData()
+        {
+            message = message,
+            type = success ? "is-success" : "is-danger"
+        };
+
+        if (!success)
+            toast.duration = 5000;
+
+        await _jsRuntime.InvokeVoidAsync("bulmaToast.toast", toast);
+    }
+
+    private async Task ErrorWrapper(Func<Task> action)
+    {
+        try
+        {
+            await action();
+        }
+        catch (ValidationException e)
+        {
+            await Toast(string.Join(", ", e.Errors.Select(x => x.ErrorMessage)), false);
+        }
+    }
+}

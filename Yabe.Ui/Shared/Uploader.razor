@@ -1,0 +1,175 @@
+﻿@using FluentValidation
+@using Microsoft.Extensions.Options
+@using Yabe.Application.Authorization
+@using Yabe.Application.Configuration
+@using Yabe.Application.Extensions
+@using Yabe.Ui.Managers
+@using Yabe.Ui.Models
+@inject IAuthorizationManager _authorizationManager
+@inject IBlobManager _blobManager
+@inject IOptions<YabeOptions> _options;
+@inherits LayoutComponentBase
+
+
+@if (_authorizationManager.CanEdit())
+{
+    <div class="file is-pulled-right">
+        <label class="file-label">
+            <InputFile class="file-input is-hidden" OnChange="@LoadFiles" multiple />
+            @if (!_isUploading)
+            {
+                <span class="file-cta is-primary">
+                    <span class="file-icon">
+                        <i class="fas fa-upload"></i>
+                    </span>
+                    <span class="file-label">
+                        Upload
+                    </span>
+                </span>
+            }
+        </label>
+    </div>
+
+    <div class="modal @(_isActive && _upload.Files.Any() ? "is-active":"")">
+        <div class="modal-background"></div>
+        <div class="modal-card">
+            <EditForm Model="_upload" OnValidSubmit="Upload">
+                @*<header class="modal-card-head">
+                    <p class="modal-card-title"></p>
+                    <button @onclick="Close" type="reset" class="delete @(_isUploading ? "is-hidden" : "")" aria-label="close"></button>
+                </header>*@
+                <section class="modal-card-body">
+                    <button @onclick="Close" type="reset" class="is-pulled-right delete @(_isUploading ? "is-hidden" : "")" aria-label="close"></button>
+                    <div class="field table-container">
+                        <label class="label">Selected files:</label>
+                        <table class="table is-narrow is-fullwidth scrollable-table">
+                            @foreach (var file in _upload.Files)
+                            {
+                                <tr>
+                                    <td>
+                                        <div>@file.Name</div>
+                                        @if (file.Size > _options.Value.MaxUploadBytes)
+                                        {
+                                    <div class="help is-danger">File too large. Max allowed size is @_options.Value.MaxUploadBytes.ToFriendlyBytesString(). </div>
+                                        }
+                                    </td>
+                                    <td>@(file.Size.ToFriendlyBytesString())</td>
+                                    @if (!_isUploading)
+                                    {
+                                        <td>
+                                            <a @onclick="() => RemoveFileFromUpload(file)">
+                                                <span class=""><i class="fas fa-times-circle"></i></span>
+                                            </a>
+                                        </td>
+                                    }
+                                </tr>
+                            }
+                        </table>
+                    </div>
+                        <div class="field">
+                            <label class="label">Upload to folder:</label>
+                            <div class="control">
+                                <InputText class="input" placeholder="/" @bind-Value="_upload.Path"></InputText>
+                            </div>
+                        </div>
+                </section>
+                <footer class="modal-card-foot">
+                    @if (_upload.IsValidSize(_options.Value))
+                    {
+                        <button id="upload" type="submit" class="button @(_isUploading ? "is-loading" : "")">Upload</button>
+                    }
+                    else
+                    {
+                        <button class="button is-danger" disabled>Upload</button>
+                    }
+                    <button type="reset" @onclick="Close" class="button @(_isUploading ? "is-hidden" : "")">Cancel</button>
+                    @if (_isUploading)
+                    {
+                        <div>
+                            Uploading @_upload.Files.Count file(s).
+                        </div>
+                    }
+
+                </footer>
+                </EditForm>
+            </div>
+    </div>
+}
+
+@code {
+    private bool _isActive;
+    private Models.Upload _upload;
+    private bool _isUploading;
+
+    [Parameter]
+    public string Directory { get; set; }
+
+    [Parameter]
+    public Func<UploadResult, Task> OnUploaderResult { get; set; }
+
+    protected override void OnInitialized()
+    {
+        _upload = new Models.Upload();
+    }
+
+    private void RemoveFileFromUpload(IBrowserFile file)
+    {
+        _upload.Files.Remove(file);
+    }
+
+    private async Task LoadFiles(InputFileChangeEventArgs e)
+    {
+        if (e.FileCount > 10)
+        {
+            await OnUploaderResult(UploadResult.ErrorResult("Too many files selected. 10 files allowed per upload."));
+            return;
+        }
+
+        var files = e.GetMultipleFiles();
+
+        _upload = new Models.Upload()
+        {
+            Files = files.ToList(),
+            Path = Directory
+        };
+
+        _isActive = true;
+        StateHasChanged();
+    }
+
+    public void Close()
+    {
+        _isActive = false;
+    }
+
+    private async Task Upload()
+    {
+        try
+        {
+            _isUploading = true;
+
+            await _blobManager.Upload(_upload);
+
+            await OnUploaderResult(UploadResult.SuccessResult(_upload.Files.Count));
+        }
+        catch (ValidationException e)
+        {
+            var validationMessage = string.Join(", ", e.Errors);
+            await OnUploaderResult(UploadResult.ErrorResult(validationMessage));
+        }
+        catch (Exception e)
+        {
+            await OnUploaderResult(UploadResult.ErrorResult(e.Message));
+        }
+        finally
+        {
+            Close();
+            _isUploading = false;
+        }
+    }
+
+    public bool IsUploadInProgress()
+    {
+        return _isUploading;
+    }
+}

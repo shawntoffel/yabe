@@ -1,0 +1,73 @@
+﻿@using System.IO
+@using Yabe.Domain
+@using Yabe.Ui.Managers
+@inject IBlobManager _blobManager
+
+<div class="table-container">
+    <table class="table is-narrow is-fullwidth" style="overflow-x:auto;">
+        <thead>
+            <tr>
+                <th>Status</th>
+                <th class="is-hidden-mobile"></th>
+                <th>Name</th>
+                <th class="is-hidden-mobile">Size</th>
+                <th class="is-hidden-mobile">Last Modified</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var dir in BlobDirectory.SubDirectories)
+            {
+            <tr>
+                <td>
+                    <span class="icon-text">
+                        <span class="icon has-text-info">
+                            <i class="fas fa-folder"></i>
+                        </span>
+                    </span>
+                </td>
+                <td class="is-hidden-mobile"></td>
+                <td>
+
+                    <a @onclick="() => SetDirectory(dir)">@(PathlessName(dir))</a>
+                </td>
+                <td class="is-hidden-mobile"></td>
+                <td></td>
+                <td></td>
+            </tr>
+            }
+            @foreach (var blob in BlobDirectory.Blobs.OrderByDescending(b => b.LastModified))
+            {
+                <BlobRow Blob="blob" OnDelete="Delete"></BlobRow>
+            }
+        </tbody>
+    </table>
+</div>
+
+@code {
+    [Parameter]
+    public BlobDirectory BlobDirectory { get; set; }
+
+    [Parameter]
+    public Func<string, Task> OnSetDirectory { get; set; }
+
+    [Parameter]
+    public Func<Blob, Task> OnDelete { get; set; }
+
+    public async Task SetDirectory(string directory)
+    {
+        if (OnSetDirectory != null)
+            await OnSetDirectory(directory);
+    }
+
+    private string PathlessName(string dir)
+    {
+        return new DirectoryInfo(dir).Name;
+    }
+
+    private async Task Delete(Blob blob)
+    {
+        if (OnDelete != null)
+            await OnDelete(blob);
+    }
+}

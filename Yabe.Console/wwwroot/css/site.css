@@ -1,0 +1,152 @@
+﻿html,
+body {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    background-color: var(--bg-color);
+    color: var(--font-color);
+}
+
+.table, .table th {
+    background-color: var(--bg-color);
+    color: var(--font-color);
+}
+
+.table thead td, .table thead th {
+    background-color: var(--bg-color);
+    color: var(--font-color);
+}
+
+.modal .table, .modal .table th {
+    background-color: var(--modal-bg-color);
+    color: var(--font-color);
+}
+
+.modal .table thead td, .modal .table thead th {
+    background-color: var(--modal-bg-color);
+    color: var(--font-color);
+}
+
+.modal-card-head, .modal-card-foot {
+    border-color: var(--modal-bg-color);
+}
+
+.modal .table td, .modal .table th {
+    border: 0;
+}
+
+h1, 
+h2, 
+h3, 
+h4, 
+h5, 
+h6, 
+.content h1, 
+.content h2, 
+.content h3, 
+.content h4, 
+.content h5, 
+.content h6, 
+.content strong,
+.title {
+    color: var(--primary-color);
+}
+
+.subtitle {
+    color: var(--muted-color);
+}
+
+.columns.is-vcentered {
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    align-items: center;
+}
+
+td {
+    word-break: break-word;
+}
+
+a, .breadcrumb a {
+    color: var(--primary);
+}
+
+a:hover, .breadcrumb a:hover {
+    color: var(--primary-hover);
+}
+
+.button {
+    color: var(--primary-color);
+    background-color: var(--primary);
+    border-color: var(--primary);
+}
+
+.button:hover {
+    background-color: var(--primary-hover);
+    color: var(--primary-color);
+    border-color: var(--primary);
+}
+
+.file .file-cta {
+    color: var(--primary-color);
+    background-color: var(--primary);
+    border-color: var(--primary);
+}
+
+.file:hover .file-cta {
+    background-color: var(--primary-hover);
+    color: var(--primary-color);
+}
+
+.modal-card-body, .modal-card-head, .modal-card-foot, .modal-card-title {
+    background-color: var(--modal-bg-color);
+    color: var(--font-color);
+}
+
+.modal .label {
+    color: var(--font-color);
+}
+
+form .input {
+    background-color: var(--form-element-bg-color);
+    border-color: var(--form-element-border-color);
+    color: var(--font-color);
+}
+
+form .input::placeholder {
+    color: var(--font-color);
+}
+
+form .input:active, form .input:hover, form .input:focus {
+    border-color: var(--primary-hover);
+}
+
+nav {
+    padding-top: 2em;
+    padding-right: 1.5em;
+    padding-left: 1.1em;
+}
+
+.main {
+    max-width: 60rem;
+    column-width: 50rem;
+}
+
+:root {
+    --hero-color: #3e8ed0;
+    --primary-color: #edf0f3;
+    --secondary-color: black;
+    --font-color: #bbc6ce;
+    --muted-color: #73828c;
+    --bg-color: #11191f;
+    --modal-bg-color: #141e26;
+    --form-element-bg-color: #11191f;
+    --form-element-border-color: #374956;
+    --primary: #1095c1;
+    --primary-hover: #1ab3e6;
+}
+
+.scrollable-table {
+    display: block;
+    max-height: calc(100vh - 512px);
+    overflow: auto;
+}

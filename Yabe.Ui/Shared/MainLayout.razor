@@ -1,0 +1,26 @@
+@using Microsoft.Extensions.Options
+@using Yabe.Application.Configuration
+@inherits LayoutComponentBase
+@inject IOptionsSnapshot<YabeOptions> _siteOptions
+
+<div>
+    
+    <div class="main container" style="max-width: 60em">
+        <section class="hero">
+            <div class="hero-body">
+                <div class="is-pulled-right">
+                    <LoginDisplay></LoginDisplay>
+                </div>
+                <p class="title">
+                    @_siteOptions.Value.Title
+                </p>
+                <p class="subtitle">
+                    @_siteOptions.Value.SubTitle
+                </p>
+            </div>
+        </section>
+        <div class="section">
+            @Body
+        </div>
+    </div>
+</div>

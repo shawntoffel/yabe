@@ -7,6 +7,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Yabe.Domain", "Yabe.Domain\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Yabe.Application", "Yabe.Application\Yabe.Application.csproj", "{DA1D8C9A-E229-4D81-8ADF-019D3E1F60D7}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Yabe.Console", "Yabe.Console\Yabe.Console.csproj", "{D7971073-ADA9-429D-B9B8-0FB4EF619887}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Yabe.Ui", "Yabe.Ui\Yabe.Ui.csproj", "{1B042938-0709-40E2-832B-C8284CE2C5E2}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +25,14 @@ Global
 		{DA1D8C9A-E229-4D81-8ADF-019D3E1F60D7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DA1D8C9A-E229-4D81-8ADF-019D3E1F60D7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DA1D8C9A-E229-4D81-8ADF-019D3E1F60D7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D7971073-ADA9-429D-B9B8-0FB4EF619887}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D7971073-ADA9-429D-B9B8-0FB4EF619887}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D7971073-ADA9-429D-B9B8-0FB4EF619887}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D7971073-ADA9-429D-B9B8-0FB4EF619887}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1B042938-0709-40E2-832B-C8284CE2C5E2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1B042938-0709-40E2-832B-C8284CE2C5E2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1B042938-0709-40E2-832B-C8284CE2C5E2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1B042938-0709-40E2-832B-C8284CE2C5E2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

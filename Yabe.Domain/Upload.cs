@@ -13,7 +13,7 @@ namespace Yabe.Domain
         {
             return new Dictionary<string, string>()
             {
-                {"Yabe-UploaderName", UploaderName}
+                {"YabeUploaderName", UploaderName}
             };
         }
     }
