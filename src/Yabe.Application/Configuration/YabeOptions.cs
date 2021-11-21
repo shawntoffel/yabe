@@ -4,7 +4,7 @@ namespace Yabe.Application.Configuration
 {
     public class YabeOptions
     {
-        public const string ConfigurationSection = "Yabe";
+        public const string ConfigurationSection = "Site";
         public string Title { get; set; }
         public string SubTitle { get; set; }
         public string EditorRole { get; set; }
