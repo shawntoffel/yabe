@@ -34,7 +34,10 @@
 
     protected async Task LoadBlobs(string path = "")
     {
-        _currentBlobDirectory = await _blobManager.ListBlobs(path);
+        await ErrorWrapper(async () =>
+        {
+            _currentBlobDirectory = await _blobManager.ListBlobs(path);
+        });
         StateHasChanged();
     }
 
@@ -88,6 +91,10 @@
         catch (ValidationException e)
         {
             await Toast(string.Join(", ", e.Errors.Select(x => x.ErrorMessage)), false);
+        }
+        catch (Exception)
+        {
+            await Toast("An error occurred.");
         }
     }
 }

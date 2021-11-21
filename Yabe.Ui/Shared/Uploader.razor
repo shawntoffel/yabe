@@ -98,7 +98,7 @@
 
 @code {
     private bool _isActive;
-    private Models.Upload _upload;
+    private Upload _upload;
     private bool _isUploading;
 
     [Parameter]
@@ -119,9 +119,9 @@
 
     private async Task LoadFiles(InputFileChangeEventArgs e)
     {
-        if (e.FileCount > 10)
+        if (e.FileCount > _options.Value.MaxFilesPerUpload)
         {
-            await OnUploaderResult(UploadResult.ErrorResult("Too many files selected. 10 files allowed per upload."));
+            await OnUploaderResult(UploadResult.ErrorResult($"Too many files selected. {_options.Value.MaxFilesPerUpload} files allowed per upload."));
             return;
         }
 
@@ -157,9 +157,9 @@
             var validationMessage = string.Join(", ", e.Errors);
             await OnUploaderResult(UploadResult.ErrorResult(validationMessage));
         }
-        catch (Exception e)
+        catch (Exception)
         {
-            await OnUploaderResult(UploadResult.ErrorResult(e.Message));
+            await OnUploaderResult(UploadResult.ErrorResult("An error occurred during upload."));
         }
         finally
         {

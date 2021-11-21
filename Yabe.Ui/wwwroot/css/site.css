@@ -132,9 +132,7 @@ nav {
 }
 
 :root {
-    --hero-color: #3e8ed0;
     --primary-color: #edf0f3;
-    --secondary-color: black;
     --font-color: #bbc6ce;
     --muted-color: #73828c;
     --bg-color: #11191f;
