@@ -34,10 +34,6 @@
         <div class="modal-background"></div>
         <div class="modal-card">
             <EditForm Model="_upload" OnValidSubmit="Upload">
-                @*<header class="modal-card-head">
-                    <p class="modal-card-title"></p>
-                    <button @onclick="Close" type="reset" class="delete @(_isUploading ? "is-hidden" : "")" aria-label="close"></button>
-                </header>*@
                 <section class="modal-card-body">
                     <button @onclick="Close" type="reset" class="is-pulled-right delete @(_isUploading ? "is-hidden" : "")" aria-label="close"></button>
                     <div class="field table-container">
