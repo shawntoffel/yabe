@@ -1,5 +1,4 @@
-﻿using System;
-using Microsoft.AspNetCore.Hosting;
+﻿using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 
@@ -17,6 +16,7 @@ namespace Yabe.Console
                 .ConfigureAppConfiguration(config =>
                 {
                     config.AddEnvironmentVariables("Yabe_");
+                    config.AddJsonFile("appsettings.secrets.json", true, true);
                 })
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
