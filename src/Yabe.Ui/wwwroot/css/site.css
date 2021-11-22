@@ -131,6 +131,12 @@ nav {
     column-width: 50rem;
 }
 
+.scrollable-table {
+    display: block;
+    max-height: calc(100vh - 512px);
+    overflow: auto;
+}
+
 :root {
     --primary-color: #edf0f3;
     --font-color: #bbc6ce;
@@ -141,10 +147,4 @@ nav {
     --form-element-border-color: #374956;
     --primary: #1095c1;
     --primary-hover: #1ab3e6;
-}
-
-.scrollable-table {
-    display: block;
-    max-height: calc(100vh - 512px);
-    overflow: auto;
 }

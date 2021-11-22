@@ -46,7 +46,7 @@
                                         <div>@file.Name</div>
                                         @if (file.Size > _options.Value.MaxUploadBytes)
                                         {
-                                    <div class="help is-danger">File too large. Max allowed size is @_options.Value.MaxUploadBytes.ToFriendlyBytesString(). </div>
+                                            <div class="help is-danger">File too large. Max allowed size is @_options.Value.MaxUploadBytes.ToFriendlyBytesString(). </div>
                                         }
                                     </td>
                                     <td>@(file.Size.ToFriendlyBytesString())</td>

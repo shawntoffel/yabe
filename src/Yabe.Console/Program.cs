@@ -15,8 +15,8 @@ namespace Yabe.Console
             Host.CreateDefaultBuilder(args)
                 .ConfigureAppConfiguration(config =>
                 {
-                    config.AddEnvironmentVariables("Yabe_");
                     config.AddJsonFile("appsettings.secrets.json", true, true);
+                    config.AddEnvironmentVariables("Yabe_");
                 })
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
