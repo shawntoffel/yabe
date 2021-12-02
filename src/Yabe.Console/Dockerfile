@@ -8,6 +8,7 @@ COPY . .
 RUN dotnet publish $CSPROJ -c Release -o out
 
 FROM mcr.microsoft.com/dotnet/aspnet:5.0-alpine3.13
+RUN apk add --no-cache tzdata
 WORKDIR /app
 COPY --from=build /app/out .
 CMD ["dotnet", "Yabe.Console.dll"]
