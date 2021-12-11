@@ -14,7 +14,7 @@ namespace Yabe.Application.Extensions
             return new Blob()
             {
                 Name = blob?.Name,
-                Url = $"{options.SiteBaseUrl}/{blob?.Name}",
+                Url = $"{options.BlobBaseUrl}/{blob?.Name}",
                 Size = properties?.ContentLength ?? 0,
                 LastModified = properties?.LastModified.InZone(options.TimeZoneId),
                 LastAccessed = properties?.LastAccessedOn.InZone(options.TimeZoneId),

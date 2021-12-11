@@ -7,26 +7,26 @@
 @using Yabe.Ui.Models
 @inject IAuthorizationManager _authorizationManager
 @inject IBlobManager _blobManager
-@inject IOptions<YabeOptions> _options;
+@inject IOptions<YabeOptions> _options
+@inject IJSRuntime _jsRuntime
 @inherits LayoutComponentBase
-
 
 @if (_authorizationManager.CanEdit())
 {
-    <div class="file is-pulled-right">
-        <label class="file-label">
-            <InputFile class="file-input is-hidden" OnChange="@LoadFiles" multiple />
-            @if (!_isUploading)
-            {
-                <span class="file-cta is-primary">
-                    <span class="file-icon">
-                        <i class="fas fa-upload"></i>
+    <div class="file">
+        <label class="file-label upload-label">
+            <InputFile class="file-input is-hidden" OnChange="@LoadFiles" @ref="_inputFile" multiple/>
+                <div @ref="_dropZoneElement" class="drop-zone">
+                    <div class="block">Drag and drop files or click to upload.</div>
+                    <span class="file-cta is-primary">
+                        <span class="file-icon">
+                            <i class="fas fa-upload"></i>
+                        </span>
+                        <span class="file-label">
+                            Upload
+                        </span>
                     </span>
-                    <span class="file-label">
-                        Upload
-                    </span>
-                </span>
-            }
+                </div>
         </label>
     </div>
 
@@ -97,6 +97,9 @@
     private Upload _upload;
     private bool _isUploading;
 
+    private ElementReference _dropZoneElement;
+    private InputFile _inputFile;
+
     [Parameter]
     public string Directory { get; set; }
 
@@ -106,6 +109,15 @@
     protected override void OnInitialized()
     {
         _upload = new Models.Upload();
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            var module = await _jsRuntime.InvokeAsync<IJSObjectReference>("import", "./_content/Yabe.Ui/js/dropZone.js");
+            await module.InvokeAsync<IJSObjectReference>("initializeFileDropZone", _dropZoneElement, _inputFile.Element);
+        }
     }
 
     private void RemoveFileFromUpload(IBrowserFile file)

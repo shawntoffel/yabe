@@ -137,6 +137,22 @@ nav {
     overflow: auto;
 }
 
+.drop-zone {
+    padding: 20px;
+    width: 100%;
+    min-height: 100px;
+    border: 2px dashed var(--primary);
+    border-radius: 5px;
+}
+
+.drop-zone.hover {
+    border-style: solid;
+}
+
+.upload-label {
+    width: 100%;
+}
+
 :root {
     --primary-color: #edf0f3;
     --font-color: #bbc6ce;
