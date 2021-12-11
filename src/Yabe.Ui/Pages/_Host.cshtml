@@ -1,6 +1,9 @@
 ﻿@page "/"
 @namespace Yabe.Ui.Pages
+@using Microsoft.Extensions.Options
+@using Yabe.Application.Configuration
 @addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@inject IOptions<YabeOptions> _options
 @{
     Layout = null;
 }
@@ -11,7 +14,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-    <title>Yabe</title>
+    <title>@_options.Value.Title</title>
     <link rel="stylesheet" href="~/_content/Yabe.Ui/css/bulma-0.9.3.min.css"  />
     <link rel="stylesheet" href="~/_content/Yabe.Ui/css/site.css"  />
     <link rel="stylesheet" href="~/_content/Yabe.Ui/fontawesome-5.15.4/css/all.min.css"  />

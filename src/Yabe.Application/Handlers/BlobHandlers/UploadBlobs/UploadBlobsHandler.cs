@@ -41,8 +41,12 @@ namespace Yabe.Application.Handlers.BlobHandlers.UploadBlobs
 
             foreach (var upload in uploads)
             {
+                var path = upload.Path;
+                if (!path.EndsWith("/"))
+                    path += "/";
+
                 var blockBlobClient = containerClient
-                    .GetBlockBlobClient(upload.Path + "/" + upload.File.Name);
+                    .GetBlockBlobClient(path + upload.File.Name);
 
                 var stream = upload.File.OpenReadStream(_options.MaxUploadBytes);
 
