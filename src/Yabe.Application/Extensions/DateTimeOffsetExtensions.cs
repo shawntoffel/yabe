@@ -9,7 +9,14 @@ namespace Yabe.Application.Extensions
             if (dateTimeOffset == null || string.IsNullOrEmpty(timeZoneId))
                 return dateTimeOffset;
 
-            return TimeZoneInfo.ConvertTimeBySystemTimeZoneId(dateTimeOffset.Value, timeZoneId);
+            try
+            {
+                return TimeZoneInfo.ConvertTimeBySystemTimeZoneId(dateTimeOffset.Value, timeZoneId);
+            }
+            catch
+            {
+                return dateTimeOffset;
+            }
         }
     }
 }

@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Yabe.Application.Configuration
+﻿namespace Yabe.Application.Configuration
 {
     public class YabeOptions
     {
@@ -11,7 +9,7 @@ namespace Yabe.Application.Configuration
         public int MaxFilesPerUpload { get; set; }
         public int MaxUploadBytes { get; set; }
         public string BlobContainerName { get; set; }
-        public string SiteBaseUrl { get; set; }
+        public string BlobBaseUrl { get; set; }
         public string TimeZoneId { get; set; }
 
         public YabeOptions()
@@ -20,14 +18,6 @@ namespace Yabe.Application.Configuration
             MaxUploadBytes = 1024 * 1024 * 15;
             MaxFilesPerUpload = 10;
             BlobContainerName = "$web";
-        }
-
-        public DateTimeOffset? DateTimeOffsetInZone(DateTimeOffset? dateTimeOffset)
-        {
-            if (dateTimeOffset == null || string.IsNullOrEmpty(TimeZoneId))
-                return dateTimeOffset;
-
-            return TimeZoneInfo.ConvertTimeBySystemTimeZoneId(dateTimeOffset.Value, TimeZoneId);
         }
     }
 }
