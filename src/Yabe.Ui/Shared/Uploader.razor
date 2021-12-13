@@ -113,7 +113,7 @@
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
-        if (firstRender)
+        if (firstRender && _authorizationManager.CanEdit())
         {
             var module = await _jsRuntime.InvokeAsync<IJSObjectReference>("import", "./_content/Yabe.Ui/js/dropZone.js");
             await module.InvokeAsync<IJSObjectReference>("initializeFileDropZone", _dropZoneElement, _inputFile.Element);
