@@ -133,7 +133,8 @@
             return;
         }
 
-        var files = e.GetMultipleFiles();
+        var files = e.GetMultipleFiles()
+            .Where(f => !string.IsNullOrEmpty(f.ContentType));
 
         _upload = new Models.Upload()
         {
