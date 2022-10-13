@@ -44,13 +44,30 @@
             }
             else
             {
-                <a @onclick="Delete">
+                <a @onclick="ConfirmDelete">
                     <span class=""><i class="far fa-trash-alt"></i></span>
                 </a>
             }
         </td>
     }
 </tr>
+
+<div class="modal @(_isConfirmingDelete ? "is-active":"")">
+    <div class="modal-background"></div>
+    <div class="modal-card">
+        <header class="modal-card-head">
+            <p class="modal-card-title">Confirm Delete</p>
+            <button @onclick="CancelDelete" type="reset" class="is-pulled-right delete" aria-label="close"></button>
+        </header>
+        <section class="modal-card-body">
+            <p>@Blob.Name</p>
+        </section>
+        <footer class="modal-card-foot">
+            <button @onclick="Delete" type="submit" class="button is-danger @(_isDeleting ? "is-loading" : "")">Delete</button>
+            <button @onclick="CancelDelete" type="reset" class="button">Cancel</button>
+        </footer>
+    </div>
+</div>
 
 @code {
     [Parameter]
@@ -61,14 +78,29 @@
 
     private bool _isDeleting;
     private bool _copied;
+    private bool _isConfirmingDelete;
+
+    private void ConfirmDelete() 
+    {
+        _isConfirmingDelete = true;
+    }
+
+    public void CancelDelete()
+    {
+        _isConfirmingDelete = false;
+    }
 
     private async Task Delete()
     {
+        if (!_isConfirmingDelete)
+            return;
+
         _isDeleting = true;
 
         if (OnDelete != null)
             await OnDelete(Blob);
 
+        _isConfirmingDelete = false;
         _isDeleting = false;
     }
 
