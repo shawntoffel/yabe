@@ -1,6 +1,7 @@
 @page "/"
 @using FluentValidation
 @using MediatR
+@using Microsoft.Extensions.Logging
 @using Yabe.Domain
 @using Yabe.Ui.Managers
 @using Yabe.Ui.Models
@@ -8,6 +9,7 @@
 @inject IBlobManager _blobManager
 @inject IMediator _mediator
 @inject AuthenticationStateProvider _authenticationStateProvider
+@inject ILogger<Index> _logger
 @attribute [Authorize]
 
 <div class="block">
@@ -23,13 +25,18 @@
 </div>
 
 @code {
+    private bool _isRendered = false;
     private string _directory = "";
-
     private BlobDirectory _currentBlobDirectory = new BlobDirectory();
 
     protected override async Task OnInitializedAsync()
     {
         await LoadBlobs(_directory);
+    }
+
+    protected override void OnAfterRender(bool firstRender)
+    {
+        _isRendered = true;
     }
 
     protected async Task LoadBlobs(string path = "")
@@ -63,6 +70,7 @@
         await ErrorWrapper(async () =>
         {
             await _blobManager.Delete(blob.Name);
+            await Toast($"Successfully deleted {blob.Name}");
         });
 
         await LoadBlobs(_directory);
@@ -70,6 +78,9 @@
 
     public async Task Toast(string message, bool success = true)
     {
+        if (!_isRendered)
+            return;
+
         var toast = new ToastData()
         {
             message = message,
@@ -92,9 +103,11 @@
         {
             await Toast(string.Join(", ", e.Errors.Select(x => x.ErrorMessage)), false);
         }
-        catch (Exception)
+        catch (Exception e)
         {
-            await Toast("An error occurred.");
+            _logger.LogError(e, "Caught an unhanded exception.");
+
+            await Toast("Something went wrong.", false);
         }
     }
 }
