@@ -7,7 +7,6 @@ using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.Extensions.Azure;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Identity.Web;
 using Microsoft.Identity.Web.UI;
@@ -15,7 +14,6 @@ using Yabe.Application.Authorization;
 using Yabe.Application.Configuration;
 using Yabe.Application.Handlers.BlobHandlers.UploadBlobs;
 using Yabe.Application.PipelineBehaviors;
-using Yabe.Ui;
 using Yabe.Ui.Managers;
 
 namespace Yabe.Console
@@ -57,7 +55,7 @@ namespace Yabe.Console
                 .AddValidatorsFromAssemblyContaining<UploadBlobsHandler>()
                 .AddTransient<IBlobManager, BlobManager>()
                 .AddTransient<IAuthorizationManager, AuthorizationManager>()
-                .AddMediatR(typeof(UploadBlobsHandler).Assembly)
+                .AddMediatR(c => c.RegisterServicesFromAssemblyContaining<UploadBlobsHandler>())
                 .AddHttpClient()
                 .AddOptions<YabeOptions>()
                 .BindConfiguration(YabeOptions.ConfigurationSection);
